@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui";
 import {
   answerLabel,
   bandInfo,
+  CALENDAR_URL,
   CONTACT_EMAIL,
   CTA_URL,
   ESTIMATE_COPY,
@@ -21,6 +22,7 @@ import type { Answers, Assessment } from "@/lib/schemas";
 import { estimate, pick } from "@/lib/scoring";
 import { cn } from "@/lib/utils";
 
+import { BookingCalendar } from "./booking-calendar";
 import { BAND_INK, ExposureMeter } from "./meter";
 
 const NUMBER_WORDS = ["", "one", "two", "three", "four", "five", "six", "seven"];
@@ -44,12 +46,14 @@ export function Result({
   answers,
   firstName,
   lastName,
+  email,
   company,
 }: {
   assessment: Assessment;
   answers: Answers;
   firstName?: string;
   lastName?: string;
+  email?: string;
   company?: string;
 }) {
   const band = bandInfo(assessment.band);
@@ -286,11 +290,26 @@ export function Result({
               size="lg"
               className="mt-7 h-auto w-full justify-center py-3.5 text-center sm:w-auto"
             >
-              <a href={CTA_URL} target="_blank" rel="noopener noreferrer">
-                <span className="sm:hidden">Book my compliance review</span>
-                <span className="hidden sm:inline">Book my complimentary compliance review</span>
-                <ArrowUpRight className="h-5 w-5" aria-hidden />
-              </a>
+              {CALENDAR_URL ? (
+                <a
+                  href="#book"
+                  onClick={(e) => {
+                    // A hash change fires popstate, which the flow treats as "back to start".
+                    e.preventDefault();
+                    document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <span className="sm:hidden">Book my compliance review</span>
+                  <span className="hidden sm:inline">Book my complimentary compliance review</span>
+                  <ArrowDown className="h-5 w-5" aria-hidden />
+                </a>
+              ) : (
+                <a href={CTA_URL} target="_blank" rel="noopener noreferrer">
+                  <span className="sm:hidden">Book my compliance review</span>
+                  <span className="hidden sm:inline">Book my complimentary compliance review</span>
+                  <ArrowUpRight className="h-5 w-5" aria-hidden />
+                </a>
+              )}
             </Button>
           </div>
           <div className="border-y border-white/15 md:mt-2 md:self-start">
@@ -310,6 +329,31 @@ export function Result({
           </div>
         </div>
       </motion.section>
+
+      {CALENDAR_URL && (
+        <motion.section
+          {...reveal(4)}
+          id="book"
+          aria-labelledby="book-heading"
+          className="no-print scroll-mt-8"
+        >
+          <h2 id="book-heading" className="tac-h2">
+            Book your complimentary compliance review
+          </h2>
+          <p className="tac-lede mt-3 max-w-[60ch]">
+            Choose a time with Kieran Cleary. Your details are already filled in, and your answers
+            will be reviewed before the call.
+          </p>
+          <div className="mt-6 overflow-hidden rounded-[var(--radius-lg)] bg-white shadow-[var(--shadow-card)] ring-1 ring-[var(--rule)]">
+            <BookingCalendar
+              firstName={firstName}
+              lastName={lastName}
+              email={email}
+              company={company}
+            />
+          </div>
+        </motion.section>
+      )}
 
       <motion.section {...reveal(5)} className="grid gap-8 md:grid-cols-[1fr_1.15fr] md:gap-10">
         <div className="min-w-0">

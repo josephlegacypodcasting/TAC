@@ -10,7 +10,9 @@ export const CONTACT_EMAIL = "kcleary@tacbenefitsgroup.com";
 export const CTA_URL =
   process.env.NEXT_PUBLIC_TAC_CTA_URL ||
   `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("ACA Compliance Exposure Check: compliance review")}`;
-export const SITE_URL = "https://tacbenefitsgroup.com";
+/** GHL booking widget URL. When set, the calendar is embedded on the result page. */
+export const CALENDAR_URL = process.env.NEXT_PUBLIC_TAC_CALENDAR_URL || "";
+export const SITE_URL ="https://tacbenefitsgroup.com";
 export const BRAND = "TAC Benefits Group";
 export const PRODUCT = "ACA Compliance Exposure Check";
 export const PHONE = "215-663-8000";

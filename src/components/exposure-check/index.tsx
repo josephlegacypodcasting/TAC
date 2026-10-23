@@ -387,6 +387,7 @@ export function ExposureCheck({
                 answers={answers}
                 firstName={lead?.firstName}
                 lastName={lead?.lastName}
+                email={lead?.email}
                 company={lead?.company}
               />
               <div className="no-print mt-10 text-center">
