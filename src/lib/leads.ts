@@ -28,6 +28,8 @@ function buildPayload({ event, lead, answers = {}, assessment, gateMode, utm = {
   const answered = QUESTIONS.filter((q) => answers[q.id] !== undefined);
 
   const body: Record<string, unknown> = {
+    // Tracking params first, so they can never overwrite the fields below.
+    ...utm,
     event: event === "lead" ? "lead_captured" : "assessment_completed",
     source: "aca-exposure-check",
     submitted_at: new Date().toISOString(),
@@ -47,7 +49,6 @@ function buildPayload({ event, lead, answers = {}, assessment, gateMode, utm = {
       .map((q) => `${q.prompt}\n→ ${answerText(q.id, answers[q.id])}`)
       .join("\n\n"),
     answers,
-    ...utm,
   };
 
   // One field per question, e.g. answer_coverage: "A preventive care plan ... only".
