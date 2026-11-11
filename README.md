@@ -18,7 +18,7 @@ Copia `.env.example` a `.env.local`:
 | Variable | Uso |
 | --- | --- |
 | `NEXT_PUBLIC_GATE_MODE` | `first` (formulario antes de las preguntas, por defecto), `last` (después) u `off` |
-| `NEXT_PUBLIC_TAC_CALENDAR_URL` | Enlace del calendario de GHL (`https://api.leadconnectorhq.com/widget/booking/<id>`). Si está definido, el calendario aparece embebido en la página de resultado, con nombre, email y empresa ya rellenados, y el botón de reserva baja hasta él |
+| `NEXT_PUBLIC_TAC_CALENDAR_URL` | Página de Calendly embebida en el resultado (por defecto `https://calendly.com/kcleary-tac540/30min`), con nombre y email ya rellenados; el botón de reserva baja hasta ella. `off` la oculta y el botón usa `NEXT_PUBLIC_TAC_CTA_URL` |
 | `NEXT_PUBLIC_TAC_CTA_URL` | Destino del botón de reserva cuando no hay calendario embebido (por defecto, mailto a Kieran Cleary) |
 | `LEAD_WEBHOOK_URL` | Webhook que recibe los leads en JSON (p. ej. el trigger "Inbound Webhook" de un workflow de GoHighLevel). Si está vacío, solo se imprime en la consola del servidor |
 

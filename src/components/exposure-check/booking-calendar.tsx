@@ -1,49 +1,43 @@
 "use client";
 
-import Script from "next/script";
 import { useMemo } from "react";
 
 import { CALENDAR_URL } from "@/lib/content";
 
 /**
- * Embedded GHL booking widget, prefilled with the contact's details.
- * GHL's form_embed.js resizes the iframe to fit the calendar.
+ * Embedded Calendly scheduling page, prefilled with the contact's name and email.
+ * A plain iframe (what Calendly's widget.js would inject) so it also works when
+ * the result is shown again after "Start over", without re-running a script.
  */
 export function BookingCalendar({
   firstName,
   lastName,
   email,
-  company,
 }: {
   firstName?: string;
   lastName?: string;
   email?: string;
   company?: string;
 }) {
-  const { src, frameId } = useMemo(() => {
+  const src = useMemo(() => {
     const url = new URL(CALENDAR_URL);
     const prefill: Record<string, string | undefined> = {
       first_name: firstName,
       last_name: lastName,
-      full_name: [firstName, lastName].filter(Boolean).join(" ") || undefined,
+      name: [firstName, lastName].filter(Boolean).join(" ") || undefined,
       email,
-      company_name: company,
     };
     for (const [key, value] of Object.entries(prefill)) if (value) url.searchParams.set(key, value);
-    const calendarId = url.pathname.split("/").filter(Boolean).pop() ?? "calendar";
-    return { src: url.toString(), frameId: `${calendarId}_embed` };
-  }, [firstName, lastName, email, company]);
+    url.searchParams.set("embed_type", "Inline");
+    url.searchParams.set("hide_gdpr_banner", "1");
+    return url.toString();
+  }, [firstName, lastName, email]);
 
   return (
-    <>
-      <iframe
-        src={src}
-        id={frameId}
-        title="Book your complimentary compliance review"
-        scrolling="no"
-        className="block min-h-[720px] w-full overflow-hidden border-0"
-      />
-      <Script src="https://link.msgsndr.com/js/form_embed.js" strategy="afterInteractive" />
-    </>
+    <iframe
+      src={src}
+      title="Book your complimentary compliance review"
+      className="block h-[1050px] w-full border-0 sm:h-[760px]"
+    />
   );
 }

@@ -67,7 +67,8 @@ export function Quiz({
     if (advanceTimer.current) clearTimeout(advanceTimer.current);
     setDirection(1);
     if (isLast) onComplete(current);
-    else setIndex((i) => i + 1);
+    // Clamp: a quick double advance (click + Enter, or the auto-advance timer) must not overshoot.
+    else setIndex((i) => Math.min(i + 1, QUESTIONS.length - 1));
   }
 
   function goBack() {
